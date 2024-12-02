@@ -2,3 +2,9 @@ services:
   backend:
     build:
       context: ./backend
+
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - 5173:5173
