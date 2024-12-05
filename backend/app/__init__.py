@@ -1,10 +1,20 @@
 from flask import Flask
+from flask_login import LoginManager
 
-from .routes import blueprint
+from .config import Config
+from .models import User
+from .routes import auth_blueprint
 
 
 def create_app():
     app = Flask(__name__)
-    app.register_blueprint(blueprint)
+    app.config.from_object(Config)
+    app.register_blueprint(auth_blueprint)
+
+    login = LoginManager(app)
+
+    @login.user_loader
+    def load_user(user_id):
+        return User.get(user_id)
 
     return app
