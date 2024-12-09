@@ -1,7 +1,6 @@
 from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import DeclarativeBase
-from werkzeug.security import check_password_hash, generate_password_hash
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 
 class Base(DeclarativeBase):
@@ -12,8 +11,8 @@ db = SQLAlchemy(model_class=Base)
 
 
 class User(UserMixin, db.Model):
-    def set_password(self, password: str) -> None:
-        self.password_hash = generate_password_hash(password)
+    __tablename__ = "users"
 
-    def check_password(self, password: str) -> bool:
-        return check_password_hash(self.password_hash, password)
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str]
+    email: Mapped[str]
