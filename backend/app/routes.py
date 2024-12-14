@@ -1,7 +1,7 @@
 from authlib.integrations.flask_client import OAuth
 from flask import Blueprint, redirect, url_for
 
-auth_blueprint = Blueprint("main", __name__)
+auth_blueprint = Blueprint("main", __name__, url_prefix="/api")
 
 oauth = OAuth()
 oauth.register(
@@ -12,7 +12,7 @@ oauth.register(
 )
 
 
-@auth_blueprint.route("/api/ping")
+@auth_blueprint.route("/ping")
 def ping():
     return {"message": "pong"}
 
