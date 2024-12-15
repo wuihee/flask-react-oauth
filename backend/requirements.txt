@@ -1,4 +1,7 @@
 Authlib
 flask
+flask-cors
 flask-login
 flask-sqlalchemy
+requests
+python-dotenv

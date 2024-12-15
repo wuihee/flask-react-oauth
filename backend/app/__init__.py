@@ -1,19 +1,38 @@
 from flask import Flask
+from flask_cors import CORS
 from flask_login import LoginManager
 
 from .config import Config
 from .models import User, db
-from .routes import auth_blueprint
+from .routes import auth_blueprint, oauth
 
 
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
+
+    # In dev, allow CORS for all domains on all routes.
+    CORS(app)
+
+    # Initialize DB and create tables.
+    db.init_app(app)
+    with app.app_context():
+        db.create_all()
+
+    # Initialize OAuth
+    oauth.init_app(app)
+    oauth.register(
+        name="google",
+        access_token_url="https://oauth2.googleapis.com/token",
+        authorize_url="https://accounts.google.com/o/oauth2/auth",
+        userinfo_endpoint="https://openidconnect.googleapis.com/v1/userinfo",
+        client_kwargs={"scope": "openid email profile"},
+    )
+
+    # Register Blueprint for Routes
     app.register_blueprint(auth_blueprint)
 
-    db.init_app(app)
-    db.create_all()
-
+    # Setup Flask-Login
     login = LoginManager(app)
 
     @login.user_loader

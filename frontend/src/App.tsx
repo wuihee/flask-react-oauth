@@ -1,20 +1,14 @@
 const App = () => {
-  ping();
+  const handleLogin = (): void => {
+    window.location.href = "http://localhost:5000/api/login";
+  };
+
   return (
     <>
-      <h1>Hello, World!</h1>
+      <h1>Homepage</h1>
+      <button onClick={handleLogin}>Login</button>
     </>
   );
-};
-
-const ping = async (): Promise<void> => {
-  try {
-    const response = await fetch("/api/ping");
-    const data = await response.json();
-    console.log(data);
-  } catch (error) {
-    console.error(error);
-  }
 };
 
 export default App;

@@ -2,9 +2,23 @@ services:
   backend:
     build:
       context: ./backend
+    ports:
+      - 5000:5000
+    develop:
+      watch:
+        - path: ./backend/app
+          action: sync
+          target: /app/app
 
   frontend:
     build:
       context: ./frontend
     ports:
       - 5173:5173
+    develop:
+      watch:
+        - path: ./frontend/src
+          action: sync
+          target: /app/src
+          ignore:
+            - node_modules
