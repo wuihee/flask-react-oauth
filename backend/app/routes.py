@@ -43,6 +43,8 @@ def authorize():
     """
     token = oauth.google.authorize_access_token()
 
+    print(token)
+
     # Extract Relevant User Info
     user_info = token["userinfo"]
     email = user_info.get("email")
