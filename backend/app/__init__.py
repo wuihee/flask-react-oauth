@@ -27,6 +27,9 @@ def create_app():
         authorize_url="https://accounts.google.com/o/oauth2/auth",
         userinfo_endpoint="https://openidconnect.googleapis.com/v1/userinfo",
         client_kwargs={"scope": "openid email profile"},
+        server_metadata_url="https://accounts.google.com/.well-known/openid-configuration",
+        jwks_uri="https://www.googleapis.com/oauth2/v3/certs",
+        redirect_uri="http://localhost:5000/api/authorize",
     )
 
     # Register Blueprint for Routes
