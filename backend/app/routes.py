@@ -1,8 +1,12 @@
+from urllib.parse import urlencode
+
 from authlib.integrations.flask_client import OAuth
 from flask import Blueprint, redirect, url_for
 from flask_login import current_user, login_required, login_user, logout_user
 
 from .models import User, db
+
+HOMEPAGE = "http://localhost:5173"
 
 auth_blueprint = Blueprint("main", __name__, url_prefix="/api")
 
@@ -22,11 +26,20 @@ def login():
     """
     This route starts the OAuth login flow.
     """
-    # Generate the callback URL which Google calls after the client logs in.
-    redirect_uri = url_for("main.authorize", _external=True)
+    if not current_user.is_anonymous:
+        return redirect(HOMEPAGE)
 
-    # Construct the URL to Google's login page.
-    return oauth.google.authorize_redirect(redirect_uri)
+    # Generate the callback URL which Google calls after the client logs in.
+    query_string = urlencode(
+        {
+            "client_id": "",
+            "redirect_uri": "",
+            "response_type": "code",
+            "scope": "",
+            "state": "",
+        }
+    )
+    return redirect(f"?{query_string}")
 
 
 @auth_blueprint.route("/authorize")
@@ -53,7 +66,7 @@ def authorize():
     login_user(user)
 
     # Redirect to React frontend.
-    return redirect("http://localhost:5173")
+    return redirect(HOMEPAGE)
 
 
 @auth_blueprint.route("/logout")
@@ -62,7 +75,7 @@ def logout():
     Logs the user out.
     """
     logout_user()
-    return redirect("http://localhost:5173")
+    return redirect(HOMEPAGE)
 
 
 @auth_blueprint.route("/user")
