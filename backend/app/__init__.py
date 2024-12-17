@@ -20,11 +20,9 @@ def create_app():
         db.create_all()
 
     # Initialize OAuth
-    # access_token_url - URL to send request to get access token.
-    # authorize_url - URL for user to login via Google.
-    # userinfo_endpoint - Endpoint to retrieve user's information.
-    # client_kwargs - Scope of informationwe are requesting from Google.
-    # jwsk_uri - 
+    # server_metadata_url contains all relevant URLs including the access_token_url,
+    # authorize_url, userinfo_endpoint, etc.
+    # client_kwargs - Scope of information we are requesting from Google.
     oauth.init_app(app)
     oauth.register(
         name="google",

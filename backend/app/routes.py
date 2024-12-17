@@ -25,25 +25,17 @@ def login():
     # Generate the callback URL which Google calls after the client logs in.
     redirect_uri = url_for("main.authorize", _external=True)
 
-    # Construct the URL to Google's login page including:
-    #   - redirect_uri
-    #   - client_id
-    #   - Randomly generated state parameter for CSRF protection.
+    # Construct the URL to Google's login page.
     return oauth.google.authorize_redirect(redirect_uri)
 
 
 @auth_blueprint.route("/authorize")
 def authorize():
     """
-    This route is called by Google after the user consents.
-    Google includes query parameters including a:
-      - code: A temporary authorization token that Flask will exchange for
-              an access token.
-      - state: The state value our app generated to protect against CSRF.
+    This route is called by the OAuth provider after the user consents.
+    It will update the user in the database and log them in.
     """
     token = oauth.google.authorize_access_token()
-
-    print(token)
 
     # Extract Relevant User Info
     user_info = token["userinfo"]
